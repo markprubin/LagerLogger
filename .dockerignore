@@ -3,7 +3,6 @@
 Dockerfile
 docker-compose.yml
 .dockerignore
-.env
 .vscode
 *.log
 *.tmp
