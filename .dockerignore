@@ -1,0 +1,10 @@
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+.dockerignore
+.env
+.vscode
+*.log
+*.tmp
+data/db
