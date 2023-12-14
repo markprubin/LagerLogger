@@ -14,10 +14,12 @@ class Brewery(Base):
 
     id = Column(String, primary_key=True)
     name = Column(String)
+    brewery_type = Column(String)
     address = Column(String)
     city = Column(String)
     state_province = Column(String)
     postal_code = Column(String)
+    country = Column(String)
     latitude = Column(String, nullable=True)
     longitude = Column(String, nullable=True)
     phone = Column(String, nullable=True)

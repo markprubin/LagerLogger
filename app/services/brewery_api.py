@@ -18,10 +18,12 @@ def insert_data_into_db(data):
             brewery = Brewery(
                 id=item.get('id'),
                 name=item.get('name'),
-                address=item.get('address'),
+                brewery_type=item.get('brewery_type'),
+                address=item.get('address_1'),
                 city=item.get('city'),
                 state_province=item.get('state_province'),
                 postal_code=item.get('postal_code'),
+                country=item.get('country'),
                 latitude=item.get('latitude'),
                 longitude=item.get('longitude'),
                 phone=item.get('phone'),
