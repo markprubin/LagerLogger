@@ -12,7 +12,7 @@ from db.database import Base
 class Brewery(Base):
     __tablename__ = "breweries"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String)
     address = Column(String)
     city = Column(String)
