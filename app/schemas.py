@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class BreweryBase(BaseModel):
-    id: int
+    id: str
     name: str
     address: str
     city: str
