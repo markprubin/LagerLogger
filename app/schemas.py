@@ -20,11 +20,11 @@ class BreweryBase(BaseModel):
         orm_mode=True
 
 
-class BrewerySchema(BreweryBase):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
+class BreweryRead(BreweryBase):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="id")
 
 
-class BreweryUpdateSchema(BaseModel):
+class BreweryUpdate(BaseModel):
     name: Optional[str] = None
     brewery_type: Optional[str] = None
     address: Optional[str] = None

@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db
-from app.schemas import BrewerySchema
+from app.schemas import BreweryRead, BreweryUpdate
 from app.models import Brewery
 from db.database import SessionLocal
 
@@ -29,23 +29,19 @@ async def store_breweries():
    
 
 # Create a Brewery (POST request) 
-@router.post('/create_brewery', response_model=BrewerySchema, status_code=status.HTTP_201_CREATED)
-async def create_brewery(brewery: BrewerySchema):
+@router.post('/create_brewery', response_model=BreweryRead, status_code=status.HTTP_201_CREATED)
+async def create_brewery(brewery: BreweryRead):
     '''
     Return: Pydantic model object (brewery) using BrewerySchema
     '''
-    
     db = SessionLocal()
     try:
-        
         new_brewery = Brewery(
             **brewery.model_dump()
         )
-    
         db.add(new_brewery)
         db.commit()
         db.close()
-        
         return brewery
     
     except Exception as e:
@@ -55,8 +51,30 @@ async def create_brewery(brewery: BrewerySchema):
 
 
 # Update Brewery
-@router.
-
+@router.put('/breweries/{brewery_id}', response_model=BreweryUpdate)
+async def update_brewery(brewery_id: str, brewery_update: BreweryUpdate):
+    db = SessionLocal()
+    try:
+        existing_brewery = db.query(Brewery).filter(Brewery.id == brewery_id).first()
+        if existing_brewery:
+            for key, value in brewery_update.model_dump().items():
+                if value is not None:
+                    setattr(existing_brewery, key, value)
+                
+            db.commit()
+            db.refresh(existing_brewery)
+            
+            return existing_brewery
+        else:
+            raise HTTPException(status_code=404, detail="Brewery not found.")
+        
+    except Exception as e:
+        db.rollback()
+        db.close()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
+    
 # Delete Brewery
 @router.delete('/delete_brewery/{brewery_id}', response_model=None, status_code=status.HTTP_200_OK)
 async def delete_brewery(brewery_id: str):
