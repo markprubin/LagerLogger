@@ -57,8 +57,7 @@ async def update_brewery(brewery_id: str, brewery_update: BreweryUpdate):
     try:
         existing_brewery = db.query(Brewery).filter(Brewery.id == brewery_id).first()
         if existing_brewery:
-            for key, value in brewery_update.model_dump().items():
-                if value is not None:
+            for key, value in brewery_update.model_dump(exclude_unset=True).items():
                     setattr(existing_brewery, key, value)
                 
             db.commit()
