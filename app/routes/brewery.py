@@ -73,7 +73,8 @@ async def update_brewery(brewery_id: str, brewery_update: BreweryUpdate):
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         db.close()
-    
+
+
 # Delete Brewery
 @router.delete('/delete_brewery/{brewery_id}', response_model=None, status_code=status.HTTP_200_OK)
 async def delete_brewery(brewery_id: str):
