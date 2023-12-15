@@ -15,5 +15,9 @@ class BreweryBase(BaseModel):
     phone: Optional[str] = None
     website_url: Optional[str] = None
     
-class Brewery(BreweryBase):
-    id: int
+    class Config:
+        orm_mode=True
+    
+class BrewerySchema(BreweryBase):
+    id: str
+    

@@ -1,6 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db
+from app.schemas import BrewerySchema
+from app.models import Brewery
+from db.database import SessionLocal
 
 router = APIRouter()
 
@@ -20,3 +23,28 @@ async def store_breweries():
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+# Create a Brewery (POST request) 
+
+@router.post('/create_brewery', response_model=BrewerySchema, status_code=status.HTTP_201_CREATED)
+async def create_brewery(brewery: BrewerySchema):
+    db = SessionLocal()
+    new_brewery = Brewery(
+        id = brewery.id,
+        name = brewery.name,
+        brewery_type = brewery.brewery_type,
+        address = brewery.address,
+        city = brewery.city,
+        state_province = brewery.state_province,
+        postal_code = brewery.postal_code,
+        country = brewery.country,
+        latitude = brewery.latitude,
+        longitude = brewery.longitude,
+        phone = brewery.phone,
+        website_url = brewery.website_url
+    )
+    
+    db.add(new_brewery)
+    db.commit()
+    
+    return new_brewery
