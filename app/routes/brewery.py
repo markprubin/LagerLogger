@@ -1,3 +1,4 @@
+from email.policy import HTTP
 from fastapi import APIRouter, HTTPException, status
 
 from app.services import brewery_api
@@ -45,6 +46,27 @@ async def create_brewery(brewery: BrewerySchema):
         db.close()
         
         return brewery
+    
+    except Exception as e:
+        db.rollback()
+        db.close()
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.delete('/delete_brewery/{brewery_id}', response_model=None, status_code=status.HTTP_200_OK)
+async def delete_brewery(brewery_id: str):
+    db = SessionLocal()
+    
+    try:
+        brewery_to_delete = db.query(Brewery).filter(Brewery.id == brewery_id).first()
+        
+        if brewery_to_delete:
+            db.delete(brewery_to_delete)
+            db.commit()
+            db.close()
+            return None
+        else:
+            db.close()
+            raise HTTPException(status_code=404, detail='Brewery not found.')
     
     except Exception as e:
         db.rollback()
