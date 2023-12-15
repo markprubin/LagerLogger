@@ -1,3 +1,4 @@
+from curses.ascii import HT
 from fastapi import APIRouter, HTTPException, status
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db
@@ -28,23 +29,23 @@ async def store_breweries():
 
 @router.post('/create_brewery', response_model=BrewerySchema, status_code=status.HTTP_201_CREATED)
 async def create_brewery(brewery: BrewerySchema):
+    '''
+    Return: Pydantic model object (brewery) using BrewerySchema
+    '''
+    
     db = SessionLocal()
-    new_brewery = Brewery(
-        id = brewery.id,
-        name = brewery.name,
-        brewery_type = brewery.brewery_type,
-        address = brewery.address,
-        city = brewery.city,
-        state_province = brewery.state_province,
-        postal_code = brewery.postal_code,
-        country = brewery.country,
-        latitude = brewery.latitude,
-        longitude = brewery.longitude,
-        phone = brewery.phone,
-        website_url = brewery.website_url
-    )
+    try:
+        new_brewery = Brewery(
+            **brewery.model_dump()
+        )
     
-    db.add(new_brewery)
-    db.commit()
+        db.add(new_brewery)
+        db.commit()
+        db.close()
+        
+        return brewery
     
-    return new_brewery
+    except Exception as e:
+        db.rollback()
+        db.close()
+        raise HTTPException(status_code=500, detail=str(e))

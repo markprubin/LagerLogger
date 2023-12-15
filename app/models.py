@@ -22,4 +22,3 @@ class Brewery(Base):
     longitude = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     website_url = Column(String, nullable=True)
-
