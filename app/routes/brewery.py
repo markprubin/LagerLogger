@@ -1,5 +1,5 @@
-from curses.ascii import HT
 from fastapi import APIRouter, HTTPException, status
+
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db
 from app.schemas import BrewerySchema
@@ -35,6 +35,7 @@ async def create_brewery(brewery: BrewerySchema):
     
     db = SessionLocal()
     try:
+        
         new_brewery = Brewery(
             **brewery.model_dump()
         )

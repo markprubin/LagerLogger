@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
+import uuid
 
 class BreweryBase(BaseModel):
-    id: str
     name: str
     brewery_type: str
     address: str
@@ -19,5 +19,5 @@ class BreweryBase(BaseModel):
         orm_mode=True
     
 class BrewerySchema(BreweryBase):
-    id: str
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="_id")
     
