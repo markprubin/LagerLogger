@@ -2,10 +2,11 @@ from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from dotenv import load_dotenv
 
-load_dotenv()
-
 from sqlalchemy import Column, Integer, String
 from db.database import Base
+
+
+load_dotenv()
 
 
 class Brewery(Base):
