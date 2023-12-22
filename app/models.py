@@ -7,6 +7,7 @@ load_dotenv()
 from sqlalchemy import Column, Integer, String
 from db.database import Base
 
+
 class Brewery(Base):
     __tablename__ = "breweries"
 
@@ -22,3 +23,13 @@ class Brewery(Base):
     longitude = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     website_url = Column(String, nullable=True)
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+

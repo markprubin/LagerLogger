@@ -15,9 +15,9 @@ class BreweryBase(BaseModel):
     longitude: Optional[str] = None
     phone: Optional[str] = None
     website_url: Optional[str] = None
-    
+
     class Config:
-        orm_mode=True
+        orm_mode = True
 
 
 class BreweryRead(BreweryBase):
