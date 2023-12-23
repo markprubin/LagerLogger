@@ -1,4 +1,4 @@
-from app.models import Base
+from app.brewery.models import Base
 from db.database import engine
 
 

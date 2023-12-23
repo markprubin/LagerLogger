@@ -36,26 +36,3 @@ class BreweryUpdate(BaseModel):
     longitude: Optional[str] = None
     phone: Optional[str] = None
     website_url: Optional[str] = None
-
-
-class UserCreate(BaseModel):
-    username: str
-    email: str
-    password: str
-    first_name: str
-    last_name: str
-
-
-class UserBase(BaseModel):
-    username: str
-    email: str
-    first_name: str
-    last_name: str
-
-
-class User(UserBase):
-    id: int
-
-
-class UserInDB(UserBase):
-    hashed_password: str

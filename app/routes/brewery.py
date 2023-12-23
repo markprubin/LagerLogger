@@ -1,11 +1,10 @@
-from email.policy import HTTP
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm import Session
 
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db
-from app.schemas import BreweryRead, BreweryUpdate
-from app.models import Brewery
+from app.brewery.schemas import BreweryRead, BreweryUpdate
+from app.brewery.models import Brewery
 from db.database import get_db
 
 router = APIRouter()
@@ -75,7 +74,6 @@ async def update_brewery(
     "/delete_brewery/{brewery_id}", response_model=None, status_code=status.HTTP_200_OK
 )
 async def delete_brewery(brewery_id: str, db: Session = Depends(get_db)):
-
     try:
         brewery_to_delete = db.query(Brewery).filter(Brewery.id == brewery_id).first()
 
