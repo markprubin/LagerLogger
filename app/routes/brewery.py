@@ -1,11 +1,12 @@
 from email.policy import HTTP
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
+from sqlalchemy.orm import Session
 
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db
 from app.schemas import BreweryRead, BreweryUpdate
 from app.models import Brewery
-from db.database import SessionLocal
+from db.database import get_db
 
 router = APIRouter()
 
@@ -33,55 +34,47 @@ async def store_breweries():
 @router.post(
     "/create_brewery", response_model=BreweryRead, status_code=status.HTTP_201_CREATED
 )
-async def create_brewery(brewery: BreweryRead):
+async def create_brewery(brewery: BreweryRead, db: Session = Depends(get_db)):
     """
     Return: Pydantic model object (brewery) using BrewerySchema
     """
-    db = SessionLocal()
+
     try:
         new_brewery = Brewery(**brewery.model_dump())
         db.add(new_brewery)
         db.commit()
-        db.close()
         return brewery
 
     except Exception as e:
         db.rollback()
-        db.close()
         raise HTTPException(status_code=500, detail=str(e))
 
 
 # Update Brewery
 @router.put("/breweries/{brewery_id}", response_model=BreweryUpdate)
-async def update_brewery(brewery_id: str, brewery_update: BreweryUpdate):
-    db = SessionLocal()
+async def update_brewery(
+    brewery_id: str, brewery_update: BreweryUpdate, db: Session = Depends(get_db)
+):
     try:
         existing_brewery = db.query(Brewery).filter(Brewery.id == brewery_id).first()
         if existing_brewery:
             for key, value in brewery_update.model_dump(exclude_unset=True).items():
                 setattr(existing_brewery, key, value)
-
             db.commit()
             db.refresh(existing_brewery)
-
             return existing_brewery
         else:
             raise HTTPException(status_code=404, detail="Brewery not found.")
-
     except Exception as e:
         db.rollback()
-        db.close()
         raise HTTPException(status_code=500, detail=str(e))
-    finally:
-        db.close()
 
 
 # Delete Brewery
 @router.delete(
     "/delete_brewery/{brewery_id}", response_model=None, status_code=status.HTTP_200_OK
 )
-async def delete_brewery(brewery_id: str):
-    db = SessionLocal()
+async def delete_brewery(brewery_id: str, db: Session = Depends(get_db)):
 
     try:
         brewery_to_delete = db.query(Brewery).filter(Brewery.id == brewery_id).first()
@@ -89,7 +82,6 @@ async def delete_brewery(brewery_id: str):
         if brewery_to_delete:
             db.delete(brewery_to_delete)
             db.commit()
-            db.close()
             return None
         else:
             db.close()
@@ -97,5 +89,4 @@ async def delete_brewery(brewery_id: str):
 
     except Exception as e:
         db.rollback()
-        db.close()
         raise HTTPException(status_code=500, detail=str(e))
