@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm import Session
+from uuid import UUID
 
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db

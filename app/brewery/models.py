@@ -13,7 +13,7 @@ load_dotenv()
 class Brewery(Base):
     __tablename__ = "breweries"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     name = Column(String)
     brewery_type = Column(String)
     address = Column(String)
