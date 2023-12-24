@@ -82,7 +82,6 @@ async def delete_brewery(brewery_id: str, db: Session = Depends(get_db)):
             db.commit()
             return None
         else:
-            db.close()
             raise HTTPException(status_code=404, detail="Brewery not found.")
 
     except Exception as e:

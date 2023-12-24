@@ -5,8 +5,10 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
 # Local
 DATABASE_URL = os.getenv("DATABASE_LOCAL")
+
 # # Docker
 # DATABASE_URL = os.getenv("DATABASE_URL")
 

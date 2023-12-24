@@ -2,11 +2,13 @@ import httpx
 from app.brewery.models import Brewery
 from db.database import SessionLocal
 
+
 # GET request for all breweries
 async def get_all_breweries():
     async with httpx.AsyncClient() as client:
-        response = await client.get('https://api.openbrewerydb.org/v1/breweries')
+        response = await client.get("https://api.openbrewerydb.org/v1/breweries")
         return response.json()
+
 
 # Fetch and Insert Function
 def insert_data_into_db(data):
@@ -16,26 +18,26 @@ def insert_data_into_db(data):
         for item in data:
             # Create instance of model with the data
             brewery = Brewery(
-                id=item.get('id'),
-                name=item.get('name'),
-                brewery_type=item.get('brewery_type'),
-                address=item.get('address_1'),
-                city=item.get('city'),
-                state_province=item.get('state_province'),
-                postal_code=item.get('postal_code'),
-                country=item.get('country'),
-                latitude=item.get('latitude'),
-                longitude=item.get('longitude'),
-                phone=item.get('phone'),
-                website_url=item.get('website_url')
+                id=item.get("id"),
+                name=item.get("name"),
+                brewery_type=item.get("brewery_type"),
+                address=item.get("address_1"),
+                city=item.get("city"),
+                state_province=item.get("state_province"),
+                postal_code=item.get("postal_code"),
+                country=item.get("country"),
+                latitude=item.get("latitude"),
+                longitude=item.get("longitude"),
+                phone=item.get("phone"),
+                website_url=item.get("website_url"),
             )
             # Add new record to session
             db.add(brewery)
-            
+
         # Commit session to save records
         db.commit()
     except Exception as e:
-        print(f'Error: {e}')
-        db.rollback() # Rollback in case of error
+        print(f"Error: {e}")
+        db.rollback()  # Rollback in case of error
     finally:
-        db.close() # Close session
+        db.close()  # Close session
