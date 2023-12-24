@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db
-from app.brewery.schemas import BreweryRead, BreweryUpdate
+from app.brewery.schemas import BreweryCreate, BreweryUpdate
 from app.brewery.models import Brewery
 from db.database import get_db
 
@@ -31,9 +31,9 @@ async def store_breweries():
 
 # Create a Brewery (POST request)
 @router.post(
-    "/create_brewery", response_model=BreweryRead, status_code=status.HTTP_201_CREATED
+    "/create_brewery", response_model=BreweryCreate, status_code=status.HTTP_201_CREATED
 )
-async def create_brewery(brewery: BreweryRead, db: Session = Depends(get_db)):
+async def create_brewery(brewery: BreweryCreate, db: Session = Depends(get_db)):
     """
     Return: Pydantic model object (brewery) using BrewerySchema
     """

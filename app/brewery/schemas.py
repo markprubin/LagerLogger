@@ -20,8 +20,8 @@ class BreweryBase(BaseModel):
         orm_mode = True
 
 
-class BreweryRead(BreweryBase):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()), alias="id")
+class BreweryCreate(BreweryBase):
+    pass
 
 
 class BreweryUpdate(BaseModel):
