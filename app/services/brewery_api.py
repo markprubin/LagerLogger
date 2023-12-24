@@ -1,5 +1,5 @@
 import httpx
-from app.brewery.models import Brewery
+from app.api.brewery.models import Brewery
 from db.database import SessionLocal
 
 

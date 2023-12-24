@@ -1,11 +1,10 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm import Session
-from uuid import UUID
 
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db
-from app.brewery.schemas import BreweryCreate, BreweryUpdate
-from app.brewery.models import Brewery
+from app.api.brewery.schemas import BreweryCreate, BreweryUpdate
+from app.api.brewery.models import Brewery
 from db.database import get_db
 
 router = APIRouter()
