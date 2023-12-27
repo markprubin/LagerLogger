@@ -1,13 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
-import os
 from dotenv import load_dotenv
+
 
 load_dotenv()
 
 # Local
-DATABASE_URL = os.getenv("DATABASE_LOCAL")
+DATABASE_URL = "postgresql://markrubin:12345@localhost:5432/brewdata"
 
 # # Docker
 # DATABASE_URL = os.getenv("DATABASE_URL")

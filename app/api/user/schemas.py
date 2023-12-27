@@ -5,7 +5,7 @@ from typing import Optional
 class UserCreate(BaseModel):
     username: str
     email: str
-    password: str
+    hashed_password: str
     first_name: str
     last_name: str
 
