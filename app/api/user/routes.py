@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from db.database import get_db
-from app.api.user.schemas import UserCreate, User, UserUpdate
+from app.api.user.schemas import UserCreate, User, UserUpdate, UserPublic, UserInDB
 from app.api.user.models import User as DBUser
 from app.utils.auth import hash_password, verify_password
 
@@ -17,7 +17,7 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
         new_user = DBUser(
             username=user.username,
             email=user.email,
-            hashed_password=hashed_password,
+            password=hashed_password,
             first_name=user.first_name,
             last_name=user.last_name,
         )
@@ -56,13 +56,16 @@ async def update_user(user_id: int, user: UserUpdate, db: Session = Depends(get_
 
 
 # Get a User
-@router.get("/users/{user_id}", response_model=User)
+@router.get("/users/{user_id}", response_model=UserPublic)
 async def get_user(user_id: int, db: Session = Depends(get_db)):
     try:
-        user = db.query(DBUser).filter(DBUser.id == user_id).first()
-        if user is None:
+        user_db = db.query(DBUser).filter(DBUser.id == user_id).first()
+        if user_db is None:
             raise HTTPException(status_code=404, detail="User not found")
-        return user
+        user_in_db = UserInDB.from_orm(user_db)
+        print(user_in_db)
+        user_response = UserPublic.from_user_in_db(user_in_db)
+        return user_response
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
@@ -92,7 +95,7 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)):
 
 @router.post("/login")
 async def login(user: UserCreate, db: Session = Depends(get_db)):
-    user_db = db.query(DBUser.username == user.username).first()
+    user_db = db.query(DBUser).filter(DBUser.username == user.username).first()
     if user_db and verify_password(user.password, user_db.hashed_password):
         return {"message": "Login successful"}
     else:
