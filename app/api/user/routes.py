@@ -1,10 +1,13 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from db.database import get_db
 from app.api.user.schemas import UserCreate, User, UserUpdate, UserPublic, UserInDB, UserLogin
 from app.api.user.models import User as DBUser
-from app.utils.auth import hash_password, verify_password
+from app.utils.auth import hash_password, verify_password, oauth2_scheme
+
 
 router = APIRouter()
 
@@ -96,6 +99,6 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)):
 async def login(user: UserLogin, db: Session = Depends(get_db)):
     user_db = db.query(DBUser).filter(DBUser.username == user.username).first()
     if user_db and verify_password(user.password, user_db.password):
-        return {"message": "Login successful"}
+        return {"message":"Success"}
     else:
-        raise HTTPException(status_code=401, detail="Login failed")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect username or password")
