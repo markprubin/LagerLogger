@@ -51,3 +51,8 @@ class UserPublic(BaseModel):
     @classmethod
     def from_user_in_db(cls, user_in_db: UserInDB):
         return cls(**user_in_db.model_dump(exclude={"hashed_password"}))
+    
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

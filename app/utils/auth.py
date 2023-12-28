@@ -1,3 +1,4 @@
+from typing import Annotated
 from fastapi import Depends, HTTPException, Security
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -39,6 +40,17 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Security(
         return user
     except JWTError:
         raise credentials_exception
+    
+    
+# Add a disabled feature to a user (bool) and then can pass this in instead of get_current_user.
+# Reference: https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/ 
+
+async def get_current_active_user(
+    current_user: Annotated[User, Depends(get_current_user)]
+):
+    if current_user.disabled:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
 
 
 def verify_password(plain_password, hashed_password):

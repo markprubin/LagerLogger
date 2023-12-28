@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from db.database import get_db
-from app.api.user.schemas import UserCreate, User, UserUpdate, UserPublic, UserInDB
+from app.api.user.schemas import UserCreate, User, UserUpdate, UserPublic, UserInDB, Token
 from app.api.user.models import User as DBUser
 from app.utils.auth import get_password_hash, verify_password, oauth2_scheme, get_current_user, create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 
@@ -101,7 +101,7 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)):
 
 
 # Authenticate User
-@router.post("/token")
+@router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user_db = db.query(DBUser).filter(DBUser.username == form_data.username).first()
     if not user_db or not verify_password(form_data.password, user_db.password):
