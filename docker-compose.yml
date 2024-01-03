@@ -7,19 +7,25 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      - postgres
     environment:
-      - DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@{DB_HOST}:5432/${POSTGRES_DB}"
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
 
-  db:
+  postgres:
     image: postgres:latest
-    container_name: laggerlogger-db-1
     volumes:
       - ./data/db:/var/lib/postgresql/data
+      - ./LagerLogger/init_db.py:/app/init_db.py
     ports:
-      - "5432:5432"
+      - "5433:5432"
     restart: always
+    networks:
+      - backend
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+networks:
+  backend:
+    driver: bridge

@@ -2,15 +2,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from dotenv import load_dotenv
-
+import os
 
 load_dotenv()
 
-# Local
-DATABASE_URL = "postgresql://markrubin:12345@localhost:5432/brewdata"
+# # Local
+# DATABASE_URL = "postgresql://markrubin:12345@localhost:5432/brewdata"
 
-# # Docker
-# DATABASE_URL = os.getenv("DATABASE_URL")
+# Docker
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
