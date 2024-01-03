@@ -15,7 +15,6 @@ services:
     image: postgres:latest
     volumes:
       - ./data/db:/var/lib/postgresql/data
-      - ./LagerLogger/init_db.py:/app/init_db.py
     ports:
       - "5433:5432"
     restart: always

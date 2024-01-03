@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.services import brewery_api
 from app.services.brewery_api import insert_data_into_db
-from app.api.brewery.schemas import BreweryCreate, BreweryUpdate
+from app.api.brewery.schemas import BreweryCreate, BreweryUpdate, BreweryBase
 from app.api.brewery.models import Brewery
 from db.database import get_db
 
@@ -14,6 +14,19 @@ router = APIRouter()
 @router.get("/breweries")
 async def get_breweries():
     return await brewery_api.get_all_breweries()
+
+
+@router.get("/breweries/{brewery_id}", response_model=BreweryBase)
+async def get_brewery(brewery_id: str, db: Session = Depends(get_db)):
+    try:
+        brewery_db = db.query(Brewery).filter(Brewery.id == brewery_id).first()
+        if brewery_db is None:
+            raise HTTPException(status_code=404, detail="Brewery not found.")
+        brewery_in_db = BreweryBase.from_orm(brewery_db)
+        return brewery_in_db
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/store_breweries")
