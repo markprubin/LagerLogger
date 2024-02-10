@@ -35,6 +35,7 @@ pip install -r requirements.txt
 
 ### Usage
 
+python -m scripts.map_script to run the script and generate the html file.
 
 ### Dependencies
 

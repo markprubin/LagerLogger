@@ -2,9 +2,11 @@ from dotenv import load_dotenv
 
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
-
-from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String
 from db.database import Base
+
+from favorites.models import Favorites
 
 
 load_dotenv()
@@ -25,3 +27,6 @@ class Brewery(Base):
     longitude = Column(String, nullable=True)
     phone = Column(String, nullable=True)
     website_url = Column(String, nullable=True)
+    favorited_by = relationship(
+        "User", secondary="favorites", back_populdates="favorites"
+    )

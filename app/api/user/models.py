@@ -1,7 +1,9 @@
 from dotenv import load_dotenv
 
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 from db.database import Base
+from favorites.models import Favorites
 
 
 load_dotenv()
@@ -16,3 +18,6 @@ class User(Base):
     password = Column(String)
     first_name = Column(String)
     last_name = Column(String)
+    favorites = relationship(
+        "Brewery", secondary="favorites", back_populates="favorited_by"
+    )
