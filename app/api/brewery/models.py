@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String
 from db.database import Base
 
-from favorites.models import Favorites
+from app.api.favorites.models import Favorites
 
 
 load_dotenv()
@@ -28,5 +28,5 @@ class Brewery(Base):
     phone = Column(String, nullable=True)
     website_url = Column(String, nullable=True)
     favorited_by = relationship(
-        "User", secondary="favorites", back_populdates="favorites"
+        "User", secondary="favorites", back_populates="favorites"
     )
