@@ -5,11 +5,20 @@
 
 The inspiration for this project is based on the idea of my buddies and I meeting up at our local breweries and connecting, having a good time, venting, and creating a brotherhood. The name "Brodelo" is also a spin on the infamous mexican Pilsner-style Lager, emphasizing the importance of male bonding.
 
-### Future Features
+### Features
 
-Currently, the app takes in breweriy data from the free and open-source dataset, [Open Brewery DB](openbrewerydb.org). In addition to the dataset provided, it has the ability to add additional breweries based on user findings.
+#### BREWERY FUNCTIONALITY
+- Ability to ingest data from Open DB Brewery API
+- Can add, edit, remove breweries
+#### USER FUNCTIONALITY
+- Can create, edit, and remove users
+- OAuth2 authentication
+- Add and Remove from favorites
+#### FOLIUM MAP
+- Map of USA with pins indicating brewery location
+Detailed info including address, website, phone #, and brewery type
+- Pinpointed using latitude and longitude coordinates
 
-The goal is also to have our user feature implement things like favoriting breweries, in case one wants to keep it on their list of go-to breweries. I'd also like to implement some sort of social feature to foster connection.
 
 ### Prerequisites
 - Python 3.11.4 installed
