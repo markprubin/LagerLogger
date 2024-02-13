@@ -1,3 +1,4 @@
+from math import fabs
 from fastapi import APIRouter, HTTPException, status, Depends
 from sqlalchemy.orm import Session
 
@@ -55,6 +56,22 @@ async def add_favorite(brewery_id: str, db: Session = Depends(get_db), current_u
             detail="An error occurred while adding the favorite." 
         ) from e 
 
-# # Remove Favorite
-# @router.delete("/favorites/remove", response_model=Favorites, status_code=status.HTTP_200_OK)
-# async def remove_favorite()
+# Remove Favorite
+@router.delete("/favorites/remove", response_model=None, status_code=status.HTTP_200_OK)
+async def remove_favorite(brewery_id: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    favorite_to_remove = (db.query(Favorites).filter(
+        Favorites.user_id == current_user.id, 
+        Favorites.brewery_id == brewery_id
+    ).first())
+        
+    if not favorite_to_remove:
+        raise HTTPException(status_code=404, detail="Favorite not found.")
+    
+    try:
+        db.delete(favorite_to_remove)
+        db.commit()
+        return "Removed from favorites."
+    
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
