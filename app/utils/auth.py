@@ -20,18 +20,20 @@ ALGORITHM = "HS256"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-async def get_current_user(db: Session = Depends(get_db), token: str = Security(oauth2_scheme)):
+async def get_current_user(
+    db: Session = Depends(get_db), token: str = Security(oauth2_scheme)
+):
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"}
+        headers={"WWW-Authenticate": "Bearer"},
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get('sub')
+        username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
         user = db.query(User).filter(User.username == username).first()
@@ -40,10 +42,11 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Security(
         return user
     except JWTError:
         raise credentials_exception
-    
-    
+
+
 # Add a disabled feature to a user (bool) and then can pass this in instead of get_current_user.
-# Reference: https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/ 
+# Reference: https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/
+
 
 async def get_current_active_user(
     current_user: Annotated[User, Depends(get_current_user)]
@@ -56,8 +59,10 @@ async def get_current_active_user(
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
+
 def get_password_hash(password):
     return pwd_context.hash(password)
+
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()

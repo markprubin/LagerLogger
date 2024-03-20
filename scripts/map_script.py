@@ -23,7 +23,7 @@ def create_map(data):
         except ValueError:
             continue
 
-        # Add market if lat and lon are valid
+        # Add marker if lat and lon are valid
         if lat is not None and lon is not None:
             folium.Marker(
                 tooltip=f"{brewery.name} - {brewery.brewery_type}",
