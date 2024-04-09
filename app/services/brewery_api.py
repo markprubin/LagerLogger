@@ -61,4 +61,3 @@ def get_coordinates(address, city, state_province, postal_code):
         return location.latitude, location.longitude
     else:
         return None
-    
