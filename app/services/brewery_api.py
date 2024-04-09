@@ -2,6 +2,10 @@ import httpx
 from app.api.brewery.models import Brewery
 from db.database import SessionLocal
 from geopy.geocoders import Nominatim
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 # GET request for all breweries
@@ -42,22 +46,3 @@ def insert_data_into_db(data):
         db.rollback()  # Rollback in case of error
     finally:
         db.close()  # Close session
-
-
-def get_coordinates(address, city, state_province, postal_code):
-    """
-    Fetches latitude and longitude from geocoding API
-    Args:
-        address(str): Street address
-        city(str): City name
-        state_province(str): State or Province name
-        postal_code (str): Postal code
-    Returns:
-        tuple: (latitude, longitude) if found, otherwise None
-    """
-    geolocator = Nominatim(user_agent="beergeocoder")
-    location = geolocator.geocode(f"{address}, {city}, {state_province}, {postal_code}")
-    if location:
-        return location.latitude, location.longitude
-    else:
-        return None

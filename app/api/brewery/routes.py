@@ -1,31 +1,26 @@
 from fastapi import APIRouter, HTTPException, status, Depends
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
+import traceback
+import logging
 
 from app.services import brewery_api
-from app.services.brewery_api import insert_data_into_db
+from app.services.brewery_api import insert_data_into_db, get_coordinates
 from app.api.brewery.schemas import BreweryCreate, BreweryUpdate, BreweryBase
 from app.api.brewery.models import Brewery
 from db.database import get_db
 
 router = APIRouter()
 
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.ERROR)
+
 
 # Return all breweries
 @router.get("/breweries")
 async def get_breweries():
     return await brewery_api.get_all_breweries()
-
-# Update Latitude and Longitude in current database
-@router.post('/load_brew_coordinates')
-async def fill_brewery_coordinates(db: Session = Depends(get_db)):
-    try:
-        breweries = db.query(Brewery).filter(Brewery.latitude == None).all()
-
-        for brewery in breweries:
-            address = brewery.address
-            city = brewery.city
-            state_province = brewery.state_province
-            postal_code = brewery.postal_code
 
 
 @router.get("/breweries/{brewery_id}", response_model=BreweryBase)
