@@ -15,6 +15,18 @@ router = APIRouter()
 async def get_breweries():
     return await brewery_api.get_all_breweries()
 
+# Update Latitude and Longitude in current database
+@router.post('/load_brew_coordinates')
+async def fill_brewery_coordinates(db: Session = Depends(get_db)):
+    try:
+        breweries = db.query(Brewery).filter(Brewery.latitude == None).all()
+
+        for brewery in breweries:
+            address = brewery.address
+            city = brewery.city
+            state_province = brewery.state_province
+            postal_code = brewery.postal_code
+
 
 @router.get("/breweries/{brewery_id}", response_model=BreweryBase)
 async def get_brewery(brewery_id: str, db: Session = Depends(get_db)):

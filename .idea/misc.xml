@@ -4,7 +4,7 @@
     <option name="enabledOnSave" value="true" />
     <option name="executionMode" value="BINARY" />
     <option name="pathToExecutable" value="$USER_HOME$/.pyenv/shims/black" />
-    <option name="sdkUUID" value="ff1e4a67-6a1c-461d-b648-69ee1738e709" />
+    <option name="sdkName" value="Python 3.11 (lagerlogger-3.11.4-venv)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 virtualenv at ~/.pyenv/versions/lagerlogger-3.11.4-venv" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (lagerlogger-3.11.4-venv)" project-jdk-type="Python SDK" />
 </project>
