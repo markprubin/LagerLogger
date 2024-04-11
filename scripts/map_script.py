@@ -1,6 +1,6 @@
 import folium
 
-from db.database import SessionLocal
+from db.db_setup import SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 

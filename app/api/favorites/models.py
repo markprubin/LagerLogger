@@ -1,6 +1,5 @@
-from db.database import Base
+from db.db_setup import Base
 from sqlalchemy import Column, Integer, String, ForeignKey
-
 
 
 class Favorites(Base):

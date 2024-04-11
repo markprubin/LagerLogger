@@ -10,7 +10,7 @@ from passlib.context import CryptContext
 from dotenv import load_dotenv
 
 from app.api.user.models import User
-from db.database import get_db
+from db.db_setup import get_db
 import os
 
 load_dotenv()

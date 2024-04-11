@@ -1,18 +1,33 @@
 import httpx
+import math
 from app.api.brewery.models import Brewery
-from db.database import SessionLocal
-from geopy.geocoders import Nominatim
-import logging
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+from db.db_setup import SessionLocal
 
 
 # GET request for all breweries
 async def get_all_breweries():
+    url = "https://api.openbrewerydb.org/v1/breweries"
+    meta_url = "https://api.openbrewerydb.org/v1/breweries/meta"
     async with httpx.AsyncClient() as client:
-        response = await client.get("https://api.openbrewerydb.org/v1/breweries")
-        return response.json()
+        meta_response = await client.get(meta_url)
+        meta_data = meta_response.json()
+
+        total_results = int(meta_data.get("total", 0))
+        per_page = 50
+        total_pages = math.ceil(total_results / per_page)
+
+        all_results = []
+
+        # Fetch all pages
+        for page in range(1, total_pages + 1):
+            response = await client.get(
+                url, params={"per_page": per_page, "page": page}
+            )
+            data = response.json()
+
+            all_results.extend(data)
+
+    return all_results
 
 
 # Fetch and Insert Function

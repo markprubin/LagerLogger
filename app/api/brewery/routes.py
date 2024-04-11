@@ -1,20 +1,13 @@
 from fastapi import APIRouter, HTTPException, status, Depends
-from sqlalchemy import or_
 from sqlalchemy.orm import Session
-import traceback
-import logging
 
 from app.services import brewery_api
-from app.services.brewery_api import insert_data_into_db, get_coordinates
+from app.services.brewery_api import insert_data_into_db
 from app.api.brewery.schemas import BreweryCreate, BreweryUpdate, BreweryBase
 from app.api.brewery.models import Brewery
-from db.database import get_db
+from db.db_setup import get_db
 
 router = APIRouter()
-
-logger = logging.getLogger(__name__)
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.ERROR)
 
 
 # Return all breweries

@@ -1,6 +1,7 @@
-from db.database import engine, Base
+from db.db_setup import Base, engine
 from app.api.brewery.models import Brewery
 from app.api.user.models import User
+from app.api.favorites.models import Favorites
 
 
 def init_db():

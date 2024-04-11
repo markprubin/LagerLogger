@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from db.database import Base
+from db.db_setup import Base
 from app.api.favorites.models import Favorites
 
 
