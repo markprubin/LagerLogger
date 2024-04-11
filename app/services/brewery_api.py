@@ -19,7 +19,7 @@ async def get_breweries_pagination(page: Optional[int] = 1):
     return data
 
 
-# GET request for all breweries (API CALL - DO NOT USE)
+# GET request for all breweries (API CALL - DO NOT USE - WILL OVERLOAD API)
 # async def get_all_breweries():
 #     url = "https://api.openbrewerydb.org/v1/breweries"
 #     meta_url = "https://api.openbrewerydb.org/v1/breweries/meta"
