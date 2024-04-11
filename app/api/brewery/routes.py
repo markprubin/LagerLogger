@@ -7,13 +7,15 @@ from app.api.brewery.schemas import BreweryCreate, BreweryUpdate, BreweryBase
 from app.api.brewery.models import Brewery
 from db.db_setup import get_db
 
+from typing import Optional
+
 router = APIRouter()
 
 
 # Return all breweries
 @router.get("/breweries")
-async def get_breweries():
-    return await brewery_api.get_all_breweries()
+async def get_breweries(page: Optional[int] = 1):
+    return await brewery_api.get_breweries_pagination(page)
 
 
 @router.get("/breweries/{brewery_id}", response_model=BreweryBase)
@@ -30,9 +32,9 @@ async def get_brewery(brewery_id: str, db: Session = Depends(get_db)):
 
 
 @router.post("/store_breweries")
-async def store_breweries():
+async def store_breweries(page: Optional[int] = 1):
     try:
-        data = await brewery_api.get_all_breweries()
+        data = await brewery_api.get_breweries_pagination(page)
 
         insert_data_into_db(data)
 

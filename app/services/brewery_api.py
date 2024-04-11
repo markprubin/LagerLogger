@@ -2,32 +2,47 @@ import httpx
 import math
 from app.api.brewery.models import Brewery
 from db.db_setup import SessionLocal
+from typing import Optional
 
 
-# GET request for all breweries
-async def get_all_breweries():
+# Get request for breweries by page
+async def get_breweries_pagination(page: Optional[int] = 1):
     url = "https://api.openbrewerydb.org/v1/breweries"
-    meta_url = "https://api.openbrewerydb.org/v1/breweries/meta"
+    per_page = (
+        200  # You can adjust this number based on how many results you want per page
+    )
+
     async with httpx.AsyncClient() as client:
-        meta_response = await client.get(meta_url)
-        meta_data = meta_response.json()
+        response = await client.get(url, params={"per_page": per_page, "page": page})
+        data = response.json()
 
-        total_results = int(meta_data.get("total", 0))
-        per_page = 50
-        total_pages = math.ceil(total_results / per_page)
+    return data
 
-        all_results = []
 
-        # Fetch all pages
-        for page in range(1, total_pages + 1):
-            response = await client.get(
-                url, params={"per_page": per_page, "page": page}
-            )
-            data = response.json()
-
-            all_results.extend(data)
-
-    return all_results
+# GET request for all breweries (API CALL - DO NOT USE)
+# async def get_all_breweries():
+#     url = "https://api.openbrewerydb.org/v1/breweries"
+#     meta_url = "https://api.openbrewerydb.org/v1/breweries/meta"
+#     async with httpx.AsyncClient() as client:
+#         meta_response = await client.get(meta_url)
+#         meta_data = meta_response.json()
+#
+#         total_results = int(meta_data.get("total", 0))
+#         per_page = 200
+#         total_pages = math.ceil(total_results / per_page)
+#
+#         all_results = []
+#
+#         # Fetch all pages
+#         for page in range(1, total_pages):
+#             response = await client.get(
+#                 url, params={"per_page": per_page, "page": page}
+#             )
+#             data = response.json()
+#
+#             all_results.extend(data)
+#
+#     return all_results
 
 
 # Fetch and Insert Function
