@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from app.api.brewery.models import Brewery
+from app.api.user.models import User
 
 
 def get_data(session: Session):
